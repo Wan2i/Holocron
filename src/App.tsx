@@ -3,16 +3,48 @@ import reactLogo from "./assets/react.svg";
 import { invoke } from "@tauri-apps/api/core";
 import "./App.css";
 
-const subjects = await invoke("get_subjects");
-console.log(subjects);
-
 function App() {
   const [greetMsg, setGreetMsg] = useState("");
   const [name, setName] = useState("");
 
   async function greet() {
-    // Learn more about Tauri commands at https://tauri.app/develop/calling-rust/
     setGreetMsg(await invoke("greet", { name }));
+  }
+
+  async function runBackendTest() {
+    try {
+      const subject: any = await invoke("create_subject", {
+        code: "CSC510",
+        name: "Discrete Structures",
+        color: "#4f46e5",
+      });
+      console.log("created subject:", subject);
+
+      const subjects = await invoke("get_subjects");
+      console.log("all subjects:", subjects);
+
+      const category = await invoke("get_category");
+      console.log("all categories:", category);
+
+      const task: any = await invoke("create_task", {
+        title: "Assignment 1",
+        dueDate: "2026-08-25",
+        completed: 0,
+        sId: subject.s_id,
+        cId: 1,
+      });
+      console.log("created task:", task);
+
+      const note: any = await invoke("create_notes", {
+        sId: subject.s_id,
+        chapter: 1,
+        name: "Intro",
+        filePath: "C:\\test\\ch1.pdf",
+      });
+      console.log("created note:", note);
+    } catch (err) {
+      console.error("backend test failed:", err);
+    }
   }
 
   return (
@@ -47,6 +79,8 @@ function App() {
         <button type="submit">Greet</button>
       </form>
       <p>{greetMsg}</p>
+
+      <button onClick={runBackendTest}>Run backend test</button>
     </main>
   );
 }

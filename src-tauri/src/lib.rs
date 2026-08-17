@@ -21,10 +21,23 @@ pub fn run() {
         })
         .invoke_handler(tauri::generate_handler![
             greet,
+            // subject
             commands::subject::get_subjects,
             commands::subject::create_subject,
             commands::subject::update_subject,
-            commands::subject::delete_subject, // Add this line to include the delete_subject command
+            commands::subject::delete_subject,
+            // notes
+            commands::notes::get_notes, 
+            commands::notes::create_notes, 
+            commands::notes::update_notes, 
+            commands::notes::delete_notes,
+            // task 
+            commands::task::get_task,
+            commands::task::create_task,
+            commands::task::update_task,
+            commands::task::delete_task,
+            // category
+            commands::category::get_category,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
