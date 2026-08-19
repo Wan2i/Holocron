@@ -8,6 +8,7 @@ function App() {
   const [name, setName] = useState("");
 
   async function greet() {
+    console.log(name);
     setGreetMsg(await invoke("greet", { name }));
   }
 
@@ -35,6 +36,8 @@ function App() {
       });
       console.log("created task:", task);
 
+      console.log(subject.s_id);
+
       const note: any = await invoke("create_notes", {
         sId: subject.s_id,
         chapter: 1,
@@ -43,7 +46,7 @@ function App() {
       });
       console.log("created note:", note);
     } catch (err) {
-      console.error("backend test failed:", err);
+      console.error("backend test failed:", err); // this is the error ("C_ID")
     }
   }
 

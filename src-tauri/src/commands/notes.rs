@@ -117,7 +117,7 @@ pub fn delete_notes(conn: State<Mutex<Connection>>, n_id: i64) -> Result<(), Str
         .map_err(|e| e.to_string())?;
 
     if rows_affected == 0 {
-        return Err(format!("No notes found with S_ID {}", n_id));
+        return Err(format!("No notes found with N_ID {}", n_id));
     }
 
     Ok(())

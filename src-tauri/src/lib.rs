@@ -15,7 +15,11 @@ pub fn run() {
     tauri::Builder::default()
         .plugin(tauri_plugin_opener::init())
         .setup(|app| {
-            let conn = database::connection::get_connection(&app.handle())?;
+            let conn = 
+            //Database connection setup
+            database::connection::get_connection(&app.handle())?;
+            database::connection::init_schema(&conn)?;
+            database::connection::seed_if_empty(&conn)?;
             app.manage(Mutex::new(conn));
             Ok(())
         })
@@ -27,11 +31,11 @@ pub fn run() {
             commands::subject::update_subject,
             commands::subject::delete_subject,
             // notes
-            commands::notes::get_notes, 
-            commands::notes::create_notes, 
-            commands::notes::update_notes, 
+            commands::notes::get_notes,
+            commands::notes::create_notes,
+            commands::notes::update_notes,
             commands::notes::delete_notes,
-            // task 
+            // task
             commands::task::get_task,
             commands::task::create_task,
             commands::task::update_task,

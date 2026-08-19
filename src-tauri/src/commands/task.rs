@@ -3,6 +3,7 @@ use rusqlite::{params, Connection};
 use std::sync::Mutex;
 use tauri::State;
 
+
 #[tauri::command]
 pub fn get_task(conn: State<Mutex<Connection>>) -> Result<Vec<Task>, String> {
     let conn = conn.lock().map_err(|e| e.to_string())?;
