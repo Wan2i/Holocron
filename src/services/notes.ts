@@ -5,7 +5,7 @@ export function getNotes(): Promise<Notes[]> {
   return invoke("get_notes");
 }
 
-export function createNotes(sId:number, chapter: number, name: string, filePath: string) : Promise<Notes> {
+export function createNotes(sId:number, chapter: number, name: string, filePath: string) : Promise<void> {
     return invoke("create_notes", {sId, chapter, name, filePath});
 }
 
