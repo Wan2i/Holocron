@@ -5,14 +5,14 @@ export function getTask(): Promise<Task[]>{
     return invoke("get_task");
 }
 
-export function createTask(title: string, due_date: string, completed: number, s_id: number, c_id: number): Promise<void>{
-    return invoke("create_task", {title, due_date, completed, s_id, c_id })
+export function createTask(title: string, due_date: string, completed: number, sId: number, cId: number): Promise<void>{
+    return invoke("create_task", {title, due_date, completed, sId, cId })
 }
 
-export function updateTask(t_id: number, title: string, due_date: string, completed: number, s_id: number, c_id: number): Promise<void>{
-    return invoke("update_task", {t_id, title, due_date, completed, s_id, c_id })
+export function updateTask(tId: number, title: string, due_date: string, completed: number, sId: number, cId: number): Promise<Task>{
+    return invoke("update_task", {tId, title, due_date, completed, sId, cId })
 }
 
-export function deleteTask(t_id: number): Promise<void>{
-    return invoke("delete_task", {t_id})
+export function deleteTask(tId: number): Promise<void>{
+    return invoke("delete_task", {tId})
 }
