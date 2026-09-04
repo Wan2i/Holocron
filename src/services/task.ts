@@ -5,7 +5,7 @@ export function getTask(): Promise<Task[]>{
     return invoke("get_task");
 }
 
-export function createTask(title: string, dueDate: string, completed: number, sId: number, cId: number): Promise<void>{
+export function createTask(title: string, dueDate: string, completed: number, sId: number, cId: number): Promise<Task>{
     return invoke("create_task", {title, dueDate, completed, sId, cId })
 }
 
