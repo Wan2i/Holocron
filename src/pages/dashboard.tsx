@@ -1,15 +1,16 @@
 import { useEffect, useState } from "react";
-import { getTask, updateTask } from "../services/task";
+import { getTask, updateTask, deleteTask } from "../services/task";
 import { getSubjects } from "../services/subject";
 import { getCategory } from "../services/category";
 import type { Task } from "../types/task";
 import type { Subject } from "../types/subject";
 import type { Category } from "../types/category";
-import { Plus, Circle, CheckCircle2 } from "lucide-react";
+import { Plus, Circle, CheckCircle2, Trash  } from "lucide-react";
+import AddTaskModal from "../components/AddTaskModal";
 
 const CATEGORY_COLORS: Record<string, { bg: string; text: string }> = {
     ASSIGNMENT: { bg: "bg-blue-500/15", text: "text-blue-300" },
-    Project: { bg: "bg-purple-500/15", text: "text-purple-300" },
+    PROJECT: { bg: "bg-purple-500/15", text: "text-purple-300" },
     TEST: { bg: "bg-red-500/15", text: "text-red-300" },
     QUIZ: { bg: "bg-amber-500/15", text: "text-amber-300" },
     PRESENTATION: { bg: "bg-pink-500/15", text: "text-pink-300" },
@@ -42,6 +43,8 @@ export default function Dashboard() {
     const [categories, setCategories] = useState<Category[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
+
+    const [showAddModal, setShowAddModal] = useState(false)
 
     useEffect(() => {
         async function loadData() {
@@ -76,6 +79,15 @@ export default function Dashboard() {
                 task.c_id
             );
             setTasks((prev) => prev.map((t) => (t.t_id === updated.t_id ? updated : t)));
+        } catch (err) {
+            setError(String(err));
+        }
+    }
+
+    async function handleDeleteTask(task: Task) {
+        try {
+            await deleteTask(task.t_id);
+            setTasks((prev) => prev.filter((t) => t.t_id !== task.t_id));
         } catch (err) {
             setError(String(err));
         }
@@ -129,6 +141,9 @@ export default function Dashboard() {
                     <p>{formatDateHeader(task.due_date)}</p>
                     <p>{formatTime(task.due_date)}</p>
                 </div>
+                <button onClick={() => handleDeleteTask(task)} className="text-transparent hover:text-red-400">
+                    <Trash className="w-4 h-4" />
+                </button>
             </div>
         );
     }
@@ -140,7 +155,7 @@ export default function Dashboard() {
                     <h1 className="text-2xl font-semibold mb-1">Dashboard</h1>
                     <p className="text-sm text-gray-400 mb-6">{upcoming.length} upcoming tasks</p>
                 </div>
-                <button className="addButton">
+                <button className="addButton" onClick={() => setShowAddModal(true)}>
                     <Plus className="w-4 h-4 mr-2" />
                     Add Task
                 </button>
@@ -170,6 +185,9 @@ export default function Dashboard() {
                     </div>
                 </section>
             )}
+
+            {showAddModal && <AddTaskModal subjects={subjects} categories={categories} onClose={() => setShowAddModal(false)} onCreated={() => setShowAddModal(false)} />}
+
         </main>
     );
 }
