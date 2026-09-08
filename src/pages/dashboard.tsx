@@ -5,7 +5,7 @@ import { getCategory } from "../services/category";
 import type { Task } from "../types/task";
 import type { Subject } from "../types/subject";
 import type { Category } from "../types/category";
-import { Plus, Circle, CheckCircle2, Trash  } from "lucide-react";
+import { Plus, Circle, CheckCircle2, Trash } from "lucide-react";
 import AddTaskModal from "../components/AddTaskModal";
 
 const CATEGORY_COLORS: Record<string, { bg: string; text: string }> = {
@@ -186,7 +186,10 @@ export default function Dashboard() {
                 </section>
             )}
 
-            {showAddModal && <AddTaskModal subjects={subjects} categories={categories} onClose={() => setShowAddModal(false)} onCreated={() => setShowAddModal(false)} />}
+            {showAddModal && <AddTaskModal subjects={subjects} categories={categories} onClose={() => setShowAddModal(false)} onCreated={(created) => {
+                setTasks((prev) => [...prev, created]);
+                setShowAddModal(false);
+            }} />}
 
         </main>
     );

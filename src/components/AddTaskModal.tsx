@@ -60,9 +60,13 @@ export default function AddTaskModal({ subjects, categories, onClose, onCreated 
                     onChange={(e) => setCategoryId(Number(e.target.value))}
                     className="w-full bg-gray-800 border border-gray-700 rounded-md p-2 mb-4 text-sm"
                 >
-                    <option value="" disabled>Select a category</option>
+                    <option value="" disabled className="rounded-full">
+                        Select a category
+                    </option>
                     {categories.map((c) => (
-                        <option key={c.c_id} value={c.c_id}>{c.category}</option>
+                        <option key={c.c_id} value={c.c_id} className="rounded-full">
+                            {c.category}
+                        </option>
                     ))}
                 </select>
 
@@ -72,9 +76,13 @@ export default function AddTaskModal({ subjects, categories, onClose, onCreated 
                     onChange={(e) => setSubjectId(Number(e.target.value))}
                     className="w-full bg-gray-800 border border-gray-700 rounded-md p-2 mb-4 text-sm"
                 >
-                    <option value="" disabled>Select a subject</option>
+                    <option value="" disabled>
+                        Select a subject
+                    </option>
                     {subjects.map((s) => (
-                        <option key={s.s_id} value={s.s_id}>{s.code} - {s.name}</option>
+                        <option key={s.s_id} value={s.s_id}>
+                            {s.code} - {s.name}
+                        </option>
                     ))}
                 </select>
 
