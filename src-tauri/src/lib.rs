@@ -13,6 +13,7 @@ fn greet(name: &str) -> String {
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     tauri::Builder::default()
+        .plugin(tauri_plugin_dialog::init())
         .plugin(tauri_plugin_opener::init())
         .setup(|app| {
             let conn = 
@@ -35,6 +36,8 @@ pub fn run() {
             commands::notes::create_notes,
             commands::notes::update_notes,
             commands::notes::delete_notes,
+            // file handler
+            commands::file_handler::open_file,
             // task
             commands::task::get_task,
             commands::task::create_task,
@@ -45,4 +48,5 @@ pub fn run() {
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
+
 }

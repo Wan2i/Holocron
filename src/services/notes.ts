@@ -16,3 +16,7 @@ export function updateNotes(nId: number, sId: number, chapter: number, name: str
 export function deleteNotes(nId: number): Promise<void> {
     return invoke("delete_notes", { nId });
 }
+
+export function openFile(path: string): Promise<void> {
+    return invoke("open_file", { path });
+}

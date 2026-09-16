@@ -2,6 +2,8 @@ import { useState } from "react";
 import Sidebar from "./components/Sidebar";
 type ActiveTab = "dashboard" | "calendar" | "subjects" | "notes";
 import Dashboard from "./pages/dashboard";
+import Subjects from "./pages/subjects";
+import Notes from "./pages/notes";
 import "./App.css";
 
 function App() {
@@ -14,9 +16,9 @@ function App() {
       case "calendar":
         return <p className="p-8">Calendar — coming soon</p>;
       case "subjects":
-        return <p className="p-8">Subjects — coming soon</p>;
+        return <Subjects/>;
       case "notes":
-        return <p className="p-8">Notes — coming soon</p>;
+        return <Notes/>;
     }
   }
 
