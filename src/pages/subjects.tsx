@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
 import { getSubjects, deleteSubject } from "../services/subject";
 import { getTask, deleteTask } from "../services/task";
+import { deleteNotes, getNotes } from "../services/notes";
 import type { Subject } from "../types/subject";
 import type { Task } from "../types/task";
+import type { Notes } from "../types/notes";
 import { Plus, Trash } from "lucide-react";
 import AddSubjectModal from "../components/AddSubjectModal";
 import ConfirmDialog from "../components/ConfirmDialog";
-
-// TODO: if there is a notes also delete them when deleting a subject.
 
 function getInitials(code: string): string {
     return code.slice(0, 2).toUpperCase();
@@ -21,15 +21,19 @@ export default function Subjects() {
 
     const [showAddModal, setShowAddModal] = useState(false);
     const [subjectToDelete, setSubjectToDelete] = useState<Subject | null>(null);
+    const [notes, setNotes] = useState<Notes[]>([]);
 
     useEffect(() => {
         async function loadData() {
             try {
                 setLoading(true);
                 setError(null);
-                const [subjectData, taskData] = await Promise.all([getSubjects(), getTask()]);
+                const [subjectData, taskData, noteData] = await Promise.all([
+                    getSubjects(), getTask(), getNotes(),
+                ]);
                 setSubjects(subjectData);
                 setTasks(taskData);
+                setNotes(noteData);
             } catch (err) {
                 setError(String(err));
             } finally {
@@ -43,18 +47,39 @@ export default function Subjects() {
         if (!subjectToDelete) return;
         try {
             const tasksToDelete = tasks.filter((t) => t.s_id === subjectToDelete.s_id);
-            for (const task of tasksToDelete) {
-                await deleteTask(task.t_id);
-            }
+            const notesToDelete = notes.filter((n) => n.s_id === subjectToDelete.s_id);
+
+            await Promise.all([
+                ...tasksToDelete.map((t) => deleteTask(t.t_id)),
+                ...notesToDelete.map((n) => deleteNotes(n.n_id)),
+            ]);
+
             await deleteSubject(subjectToDelete.s_id);
 
             setTasks((prev) => prev.filter((t) => t.s_id !== subjectToDelete.s_id));
+            setNotes((prev) => prev.filter((n) => n.s_id !== subjectToDelete.s_id));
             setSubjects((prev) => prev.filter((s) => s.s_id !== subjectToDelete.s_id));
         } catch (err) {
             setError(String(err));
         } finally {
             setSubjectToDelete(null);
         }
+    }
+
+    function getDeleteMessage(subject: Subject, taskCount: number, noteCount: number): string {
+        const parts: string[] = [];
+        if (taskCount > 0) parts.push(`${taskCount} task${taskCount === 1 ? "" : "s"}`);
+        if (noteCount > 0) parts.push(`${noteCount} note${noteCount === 1 ? "" : "s"}`);
+
+        const base = `Delete ${subject.code} — ${subject.name}?`;
+
+        if (parts.length === 0) return `${base} This can't be undone.`;
+        return `${base} This subject has ${parts.join(" and ")}. This can't be undone.`;
+    }
+
+    const noteCountBySubject = new Map<number, number>();
+    for (const note of notes) {
+        noteCountBySubject.set(note.s_id, (noteCountBySubject.get(note.s_id) ?? 0) + 1);
     }
 
     if (loading) return <p className="p-8 text-sm text-gray-400">Loading…</p>;
@@ -72,6 +97,8 @@ export default function Subjects() {
     for (const task of tasks) {
         totalTaskCountBySubject.set(task.s_id, (totalTaskCountBySubject.get(task.s_id) ?? 0) + 1);
     }
+
+
 
     return (
         <main className="p-8 text-white">
@@ -127,12 +154,11 @@ export default function Subjects() {
             {subjectToDelete && (
                 <ConfirmDialog
                     title="Delete subject"
-                    message={
-                        (totalTaskCountBySubject.get(subjectToDelete.s_id) ?? 0) > 0
-                            ? `Delete ${subjectToDelete.code} — ${subjectToDelete.name}? This subject has ${totalTaskCountBySubject.get(subjectToDelete.s_id)
-                            } task(s).`
-                            : `Delete ${subjectToDelete.code} — ${subjectToDelete.name}? This can't be undone.`
-                    }
+                    message={getDeleteMessage(
+                        subjectToDelete,
+                        totalTaskCountBySubject.get(subjectToDelete.s_id) ?? 0,
+                        noteCountBySubject.get(subjectToDelete.s_id) ?? 0
+                    )}
                     confirmLabel="Delete"
                     onConfirm={confirmDelete}
                     onCancel={() => setSubjectToDelete(null)}
