@@ -4,6 +4,7 @@ type ActiveTab = "dashboard" | "calendar" | "subjects" | "notes";
 import Dashboard from "./pages/dashboard";
 import Subjects from "./pages/subjects";
 import Notes from "./pages/notes";
+import Calendar from "./pages/calendar";
 import "./App.css";
 
 function App() {
@@ -14,7 +15,7 @@ function App() {
       case "dashboard":
         return <Dashboard/>;
       case "calendar":
-        return <p className="p-8">Calendar — coming soon</p>;
+        return <Calendar/>;
       case "subjects":
         return <Subjects/>;
       case "notes":

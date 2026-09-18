@@ -43,7 +43,6 @@ export default function Dashboard() {
     const [categories, setCategories] = useState<Category[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
-
     const [showAddModal, setShowAddModal] = useState(false)
 
     useEffect(() => {
