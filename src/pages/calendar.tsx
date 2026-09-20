@@ -151,9 +151,21 @@ export default function Calendar() {
                             {selectedTasks.map((task) => {
                                 const subject = subjectById.get(task.s_id);
                                 return (
-                                    <div key={task.t_id} className="text-sm">
-                                        <p className="font-medium">{task.title}</p>
-                                        <p className="text-xs text-gray-400">{subject?.code ?? "Unknown subject"}</p>
+                                    <div
+                                        key={task.t_id}
+                                        className="bg-gray-900 border border-gray-700 rounded-xl p-4 hover:border-gray-600 transition-colors"
+                                    >
+                                        <div className="flex items-center justify-between">
+                                            <div>
+                                                <p className="text-sm font-medium text-gray-100">
+                                                    {task.title}
+                                                </p>
+
+                                                <p className="text-xs text-gray-400 mt-1">
+                                                    {subject?.code ?? "Unknown subject"}
+                                                </p>
+                                            </div>
+                                        </div>
                                     </div>
                                 );
                             })}

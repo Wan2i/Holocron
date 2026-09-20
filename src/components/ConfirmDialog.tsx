@@ -17,7 +17,9 @@ export default function ConfirmDialog({
         <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 text-white">
             <div className="bg-gray-900 border border-gray-800 rounded-xl p-6 w-full max-w-sm">
                 <h2 className="text-lg font-semibold mb-2">{title}</h2>
-                <p className="text-sm text-gray-400 mb-6">{message}</p>
+                <p className="text-sm text-gray-400 mb-6 break-words whitespace-normal overflow-wrap-anywhere overscroll">
+                    {message}
+                </p>
                 <div className="flex justify-end gap-2">
                     <button onClick={onCancel} className="px-4 py-2 rounded-md bg-gray-800 text-sm">
                         Cancel

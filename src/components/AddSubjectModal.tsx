@@ -45,6 +45,8 @@ export default function AddSubjectModal({ onClose, onCreated }: AddSubjectModalP
                     onChange={(e) => setCode(e.target.value)}
                     placeholder="e.g. MATH101"
                     className="w-full bg-gray-800 border border-gray-700 rounded-md p-2 mb-4 text-sm"
+                    minLength={3}
+                    maxLength={10}
                 />
 
                 <label className="block text-sm mb-1">Subject name</label>
@@ -53,7 +55,13 @@ export default function AddSubjectModal({ onClose, onCreated }: AddSubjectModalP
                     onChange={(e) => setName(e.target.value)}
                     placeholder="e.g. Calculus I"
                     className="w-full bg-gray-800 border border-gray-700 rounded-md p-2 mb-4 text-sm"
+                    minLength={15}
+                    maxLength={50}
                 />
+
+                <p className="text-[11px] text-gray-400 -mt-3 mb-4">
+                    {name.trim().length}/50 characters
+                </p>
 
                 <label className="block text-sm mb-1">Color</label>
                 <div className="flex items-center gap-2 mb-4">

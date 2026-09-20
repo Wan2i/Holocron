@@ -79,6 +79,9 @@ export default function Notes() {
 
     const subjectById = new Map(subjects.map((s) => [s.s_id, s]));
     const groupedNotes = groupBySubject(notes);
+    const deleteMessage = noteToDelete
+        ? `Delete "${noteToDelete.name.length > 50 ? `${noteToDelete.name.slice(0, 47)}...` : noteToDelete.name}"? This can't be undone.`
+        : "";
 
     return (
         <main className="p-8 text-white">
@@ -158,7 +161,7 @@ export default function Notes() {
             {noteToDelete && (
                 <ConfirmDialog
                     title="Delete note"
-                    message={`Delete "${noteToDelete.name}"? This can't be undone.`}
+                    message={deleteMessage}
                     confirmLabel="Delete"
                     onConfirm={confirmDelete}
                     onCancel={() => setNoteToDelete(null)}
