@@ -18,8 +18,13 @@ export default function AddNoteModal({ subjects, onClose, onCreated }: AddNoteMo
     const [submitting, setSubmitting] = useState(false);
     const [error, setError] = useState<string | null>(null);
 
+    const trimmedName = name.trim();
     const canSubmit =
-        subjectId !== "" && chapter.trim() !== "" && name.trim() !== "" && filePath !== null;
+        subjectId !== "" &&
+        chapter.trim() !== "" &&
+        trimmedName.length >= 35 &&
+        trimmedName.length <= 70 &&
+        filePath !== null;
 
     async function handlePickFile() {
         const selected = await open({
@@ -39,7 +44,7 @@ export default function AddNoteModal({ subjects, onClose, onCreated }: AddNoteMo
             const created = await createNotes(
                 Number(subjectId),
                 Number(chapter),
-                name.trim(),
+                trimmedName,
                 filePath as string
             );
             onCreated(created);
@@ -78,15 +83,25 @@ export default function AddNoteModal({ subjects, onClose, onCreated }: AddNoteMo
                     onChange={(e) => setChapter(e.target.value)}
                     placeholder="e.g. 1"
                     className="w-full bg-gray-800 border border-gray-700 rounded-md p-2 mb-4 text-sm"
+                    min="1"
+                    onKeyDown={(e) => {
+                        if (e.key === "-") e.preventDefault();
+                    }}
                 />
 
                 <label className="block text-sm mb-1">Note name</label>
                 <input
                     value={name}
-                    onChange={(e) => setName(e.target.value)}
-                    placeholder="e.g. Introduction"
+                    onChange={(e) => setName(e.target.value.slice(0, 70))}
+                    placeholder="35-70 characters"
                     className="w-full bg-gray-800 border border-gray-700 rounded-md p-2 mb-4 text-sm"
+                    minLength={15}
+                    maxLength={50}
                 />
+
+                <p className="text-[11px] text-gray-400 -mt-3 mb-4">
+                    {trimmedName.length}/50 characters
+                </p>
 
                 <label className="block text-sm mb-1">File</label>
                 <button
