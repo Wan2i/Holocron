@@ -55,7 +55,7 @@ export default function AddSubjectModal({ onClose, onCreated }: AddSubjectModalP
                     onChange={(e) => setName(e.target.value)}
                     placeholder="e.g. Calculus I"
                     className="w-full bg-gray-800 border border-gray-700 rounded-md p-2 mb-4 text-sm"
-                    minLength={15}
+                    minLength={1}
                     maxLength={50}
                 />
 

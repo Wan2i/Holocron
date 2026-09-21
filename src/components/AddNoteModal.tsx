@@ -22,8 +22,8 @@ export default function AddNoteModal({ subjects, onClose, onCreated }: AddNoteMo
     const canSubmit =
         subjectId !== "" &&
         chapter.trim() !== "" &&
-        trimmedName.length >= 35 &&
-        trimmedName.length <= 70 &&
+        trimmedName.length >= 1 &&
+        trimmedName.length <= 50 &&
         filePath !== null;
 
     async function handlePickFile() {
@@ -92,10 +92,10 @@ export default function AddNoteModal({ subjects, onClose, onCreated }: AddNoteMo
                 <label className="block text-sm mb-1">Note name</label>
                 <input
                     value={name}
-                    onChange={(e) => setName(e.target.value.slice(0, 70))}
-                    placeholder="35-70 characters"
+                    onChange={(e) => setName(e.target.value.slice(0, 50))}
+                    placeholder="15-50 characters"
                     className="w-full bg-gray-800 border border-gray-700 rounded-md p-2 mb-4 text-sm"
-                    minLength={15}
+                    minLength={1}
                     maxLength={50}
                 />
 

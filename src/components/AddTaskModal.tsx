@@ -52,7 +52,7 @@ export default function AddTaskModal({ subjects, categories, onClose, onCreated 
                     onChange={(e) => setTitle(e.target.value)}
                     placeholder="e.g. Chapter 5 problem set"
                     className="w-full bg-gray-800 border border-gray-700 rounded-md p-2 mb-4 text-sm"
-                    minLength={15}
+                    minLength={1}
                     maxLength={50}
                 />  
 
